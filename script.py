@@ -3,7 +3,7 @@ import subprocess
 import tempfile
 import sys
 
-async def speech(text, voice):
+def speech(text, voice):
     media = tempfile.NamedTemporaryFile(suffix=".mp3", delete=False)
     media.close()
     mp3_fname = media.name

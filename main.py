@@ -8,7 +8,6 @@ from script import speech
 
 EDGE_TTS_VOICE_TYPE = ["en-GB-SoniaNeural", "en-US-GuyNeural", "en-US-JennyNeural"]
 
-
 class TextToSpeechThread(QThread):
     finished = Signal()
 
@@ -18,8 +17,7 @@ class TextToSpeechThread(QThread):
         self.voice = voice
 
     def run(self):
-        asyncio.run(speech(text=self.text, voice=self.voice))
-        print("TextToSpeechThread run " + self.text)
+        speech(text=self.text, voice=self.voice)
         self.finished.emit()
 
 
