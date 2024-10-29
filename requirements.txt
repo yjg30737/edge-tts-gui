@@ -1,2 +1,3 @@
-edge-tts
 PySide6
+edge-tts
+psutil
