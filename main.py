@@ -1,19 +1,24 @@
-from main_5_exec_mpv_background import speech
-from PySide6.QtWidgets import QApplication, QMainWindow, QTextEdit, QPushButton, QVBoxLayout, QWidget
-from PySide6.QtCore import QThread, Signal
+
 
 import sys, asyncio
+from PySide6.QtWidgets import QApplication, QMainWindow, QTextEdit, QPushButton, QFormLayout, QWidget, QComboBox
+from PySide6.QtCore import QThread, Signal
+
+from script import speech
+
+EDGE_TTS_VOICE_TYPE = ["en-GB-SoniaNeural", "en-US-GuyNeural", "en-US-JennyNeural"]
 
 
 class TextToSpeechThread(QThread):
     finished = Signal()
 
-    def __init__(self, text, parent=None):
+    def __init__(self, text, voice, parent=None):
         super().__init__(parent)
         self.text = text
+        self.voice = voice
 
     def run(self):
-        asyncio.run(speech(text=self.text, voice="en-US-AndrewMultilingualNeural"))
+        asyncio.run(speech(text=self.text, voice=self.voice))
         print("TextToSpeechThread run " + self.text)
         self.finished.emit()
 
@@ -26,16 +31,20 @@ class MainWindow(QMainWindow):
     def __initUi(self):
         self.setWindowTitle("Text to Speech")
 
+        self.voiceCmbBox = QComboBox()
+        self.voiceCmbBox.addItems(EDGE_TTS_VOICE_TYPE)
+
         self.text_area = QTextEdit(self)
         self.play_button = QPushButton("Play", self)
         self.play_button.clicked.connect(self.play_text)
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.text_area)
-        layout.addWidget(self.play_button)
+        lay = QFormLayout()
+        lay.addRow('Voice', self.voiceCmbBox)
+        lay.addRow(self.text_area)
+        lay.addRow(self.play_button)
 
         container = QWidget()
-        container.setLayout(layout)
+        container.setLayout(lay)
         self.setCentralWidget(container)
 
         self.show()
@@ -43,7 +52,8 @@ class MainWindow(QMainWindow):
     def play_text(self):
         text = self.text_area.toPlainText()
         if text:
-            self.thread = TextToSpeechThread(text)
+            voice = self.voiceCmbBox.currentText()
+            self.thread = TextToSpeechThread(text, voice)
             self.thread.finished.connect(self.on_play_finished)
             self.play_button.setEnabled(False)
             self.thread.start()
