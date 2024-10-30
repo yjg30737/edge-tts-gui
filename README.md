@@ -1,5 +1,6 @@
 # edge-tts-gui
 This shows how to use edge-tts on Python without showing mpv window asynchronously. Also, you can stop playing edge-tts in the middle.
+MP3 and VTT(for subtitle) files are generated for mpv to play, and after mpv is terminated, both will be deleted.
 
 ## Requirements
 * PySide6
@@ -19,3 +20,4 @@ This shows how to use edge-tts on Python without showing mpv window asynchronous
 6. python main.py
 
 ## Preview
+https://youtu.be/Vp3F1Gx7g0g
