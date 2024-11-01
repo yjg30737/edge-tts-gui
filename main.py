@@ -38,7 +38,8 @@ class TextToSpeechThread(QThread):
                     f"--write-subtitles={vtt_fname}",
                     f"--voice={self.voice}",
                     f"--text={self.text}",
-                ]
+                ],
+                creationflags=subprocess.CREATE_NO_WINDOW
         ) as process:
             process.communicate()
 
